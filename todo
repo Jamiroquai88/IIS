@@ -1,0 +1,16 @@
+todo:
+ReservationsController -> dialog window na confirm a delete reservation
+	na confirm zobrazit nove okno s udajmi o rezervacii a Yes/No, ak uzivatel zada No, tak sa nic nestane s databazou, ak ano, je naimplementovany postup v getConfirmReservation()
+	na delete vyvolat dialog Are you sure? etc. a len vymazat rezervaciu, uz je to naimplementovane v getDeleteReservation()
+
+BillingController -> dialog boxy so zobrazenim udajov kde to je len mozne, napr. pri charge - suhrny box, chces tomuto zakaznikovi zauctovat toto???
+	to iste pri add guest, aj pri check oute
+	past accomodations -> potrebne, aby sa odkazovalo s udajmi na byvalych hosti -> search box(naimplementovany v guests, len ho pouzit)
+
+	dorobit naplnanie tabulky platby (to asi dorobim ja, len potrebujem relacny model)
+
+++++ new look - tabulky, odkazy, proste secko, ak nebudes(nebudeme) stihat spravit front end, tak jebat na front end
+
+
+22+115+40+18 195
+13+30+5+30+30+25+6 139

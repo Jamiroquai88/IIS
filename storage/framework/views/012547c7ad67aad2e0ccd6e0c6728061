@@ -1,0 +1,84 @@
+<?php $__env->startSection('content'); ?>
+
+
+		<h2>Edit reservation</h2>
+		<?php if($errors->has()): ?>
+			<p>The following errors have occured:</p>
+
+			<ul id="form-errors">
+				<?php echo $errors->first('date_from','<li>:message</li>'); ?>
+
+				<?php echo $errors->first('date_to','<li>:message</li>'); ?>
+
+				<?php echo $errors->first('persons_number','<li>:message</li>'); ?>
+
+				<?php echo $errors->first('room','<li>:message</li>'); ?>
+
+				<?php echo $errors->first('message','<li>:message</li>'); ?>
+
+			</ul>
+		<?php endif; ?>
+
+		<?php echo Form::open(['editreservation', 'POST']); ?>
+
+
+		<?php echo Form::hidden('id', $previous->CisRezervace); ?>
+
+
+		<?php echo Form::token(); ?>
+
+		
+			<p>
+				<?php echo Form::label('date_from', 'From *'); ?><br />
+				<?php if(!$old): ?>
+					<?php echo Form::date('date_from', $previous->Datum); ?>
+
+				<?php else: ?>
+					<?php echo Form::date('date_from', \Carbon\Carbon::now()); ?>
+
+				<?php endif; ?>
+			</p>	
+
+			<p>
+				<?php echo Form::label('date_to', 'To *'); ?><br />
+				<?php if(!$old): ?>
+					<?php echo Form::date('date_to', $previous->DatumDo); ?>
+
+				<?php else: ?>
+					<?php echo Form::date('date_to', \Carbon\Carbon::now()); ?>
+
+				<?php endif; ?>
+			</p>		
+
+			<p>
+				<?php echo Form::label('persons_number', 'Number of persons *'); ?><br />
+				<?php if(!$old): ?>
+					<?php echo Form::number('persons_number', $previous->osob); ?>
+
+				<?php else: ?>
+					<?php echo Form::number('persons_number', '1'); ?>
+
+				<?php endif; ?>
+			</p>
+
+			<p>
+				<?php echo Form::label('room', 'Room number(beds) *'); ?><br />
+				<?php if(!$old): ?>
+					<?php echo Form::select('room', [$previous->CisPokoje => ($previous->CisPokoje . '(' . $previous->Posteli . ')')] + $allrooms); ?>
+
+				<?php else: ?>
+					<?php echo Form::select('room', $allrooms); ?>
+
+				<?php endif; ?>
+			</p>
+
+			<p><?php echo Form::submit('Edit Reservation'); ?></p>
+
+			<h5>All fields with * are required.</h5>
+
+
+		<?php echo Form::close(); ?>
+
+
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

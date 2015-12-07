@@ -1,0 +1,69 @@
+<?php $__env->startSection('content'); ?>
+
+	<h2>Edit account</h2>
+	<?php if($errors->has()): ?>
+		<p>The following errors have occured:</p>
+
+		<ul id="form-errors">
+			<?php echo $errors->first('address','<li>:message</li>'); ?>
+
+			<?php echo $errors->first('telephone','<li>:message</li>'); ?>
+
+			<?php echo $errors->first('mail','<li>:message</li>'); ?>
+
+		</ul>
+	<?php endif; ?>
+
+	<?php echo Form::open(['register', 'POST']); ?>
+
+
+	<?php echo Form::hidden('id', $previous->id); ?>
+
+
+	<?php echo Form::token(); ?>
+
+
+	<?php if($previous && $previous->username == 'admin'): ?>
+		<br><br><h2>You little rebel! I like U!</h2>
+	<?php else: ?>
+		<p>
+			<?php echo Form::label('address', 'Address'); ?><br />
+			<?php if(!$old): ?>
+				<?php echo Form::text('address', $previous->address); ?>
+
+			<?php else: ?>
+				<?php echo Form::text('address', Input::old('address')); ?>
+
+			<?php endif; ?>
+		</p>
+
+		<p>
+			<?php echo Form::label('telephone', 'Telephone Number'); ?><br />
+			<?php if(!$old): ?>
+				<?php echo Form::text('telephone', $previous->telephone); ?>
+
+			<?php else: ?>
+				<?php echo Form::text('telephone', Input::old('telephone')); ?>
+
+			<?php endif; ?>
+		</p>
+
+		<p>
+			<?php echo Form::label('mail', 'E-mail'); ?><br />
+			<?php if(!$old): ?>
+				<?php echo Form::text('mail', $previous->mail); ?>
+
+			<?php else: ?>
+				<?php echo Form::text('mail', Input::old('mail')); ?>
+
+			<?php endif; ?>
+		</p>
+
+		<p><?php echo Form::submit('Edit Account'); ?></p>
+	<?php endif; ?>
+
+	<?php echo Form::close(); ?>
+
+
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

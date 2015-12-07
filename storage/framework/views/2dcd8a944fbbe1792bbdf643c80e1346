@@ -1,0 +1,10 @@
+<?php $__env->startSection('content'); ?>
+	<H1>Authors home page</H1>
+
+	<ul>
+	<?php foreach($authors as $author): ?>
+		<li><?php echo e($author->name); ?></li>
+	<?php endforeach; ?>
+	</ul>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

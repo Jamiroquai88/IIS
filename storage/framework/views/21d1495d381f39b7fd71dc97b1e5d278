@@ -1,0 +1,89 @@
+<?php $__env->startSection('content'); ?>
+
+	<h2>Register</h2>
+	<?php if($errors->has()): ?>
+		<p>The following errors have occured:</p>
+
+		<ul id="form-errors">
+			<?php echo $errors->first('username','<li>:message</li>'); ?>
+
+			<?php echo $errors->first('password','<li>:message</li>'); ?>
+
+			<?php echo $errors->first('password_confirmation','<li>:message</li>'); ?>
+
+			<?php echo $errors->first('name','<li>:message</li>'); ?>
+
+			<?php echo $errors->first('birth_date','<li>:message</li>'); ?>
+
+			<?php echo $errors->first('address','<li>:message</li>'); ?>
+
+			<?php echo $errors->first('telephone','<li>:message</li>'); ?>
+
+			<?php echo $errors->first('mail','<li>:message</li>'); ?>
+
+		</ul>
+	<?php endif; ?>
+
+	<?php echo Form::open(['register', 'POST']); ?>
+
+
+	<?php echo Form::token(); ?>
+
+
+	<p>
+		<?php echo Form::label('username', 'Username *'); ?><br />
+		<?php echo Form::text('username', Input::old('username')); ?>
+
+	</p>
+
+	<p>
+		<?php echo Form::label('password', 'Password *'); ?><br />
+		<?php echo Form::password('password'); ?>
+
+	</p>	
+
+	<p>
+		<?php echo Form::label('password_confirmation', 'Confirm Password *'); ?><br />
+		<?php echo Form::password('password_confirmation'); ?>
+
+	</p>
+
+	<p>
+		<?php echo Form::label('name', 'Full name *'); ?><br />
+		<?php echo Form::text('name', Input::old('name')); ?>
+
+	</p>
+
+	<p>
+		<?php echo Form::label('address', 'Address'); ?><br />
+		<?php echo Form::text('address', Input::old('address')); ?>
+
+	</p>
+
+	<p>
+		<?php echo Form::label('birth_date', 'Date of birth'); ?><br />
+		<?php echo Form::date('birth_date'); ?>
+
+	</p>	
+
+	<p>
+		<?php echo Form::label('telephone', 'Telephone Number'); ?><br />
+		<?php echo Form::text('telephone', Input::old('telephone')); ?>
+
+	</p>
+
+	<p>
+		<?php echo Form::label('mail', 'E-mail'); ?><br />
+		<?php echo Form::text('mail', Input::old('mail')); ?>
+
+	</p>
+
+	<p><?php echo Form::submit('Register'); ?></p>
+
+	<h5>All fields with * are required.</h5>
+
+	<?php echo Form::close(); ?>
+
+
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

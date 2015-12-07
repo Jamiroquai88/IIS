@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title><?php echo e($title); ?></title>
+		<?php echo Html::style('/css/bootstrap.min.css'); ?>
+
+		<?php echo Html::style('/css/main.css'); ?>
+
+		<?php echo Html::script('/js/bootstrap.min.js'); ?>
+
+		<?php echo Html::script('/js/application.js'); ?>
+
+	</head>
+	<body>
+		<div class="container">
+
+			<nav class="navbar navbar-default"> 
+			  	<div class="container-fluid">  
+			    	<div class="navbar-header"> 
+			      		<button aria-expanded="false" data-target="#bs-example-navbar-collapse-1" data-toggle="collapse" class="navbar-toggle collapsed" type="button"> 
+			        		<span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> 
+			        		<span class="icon-bar"></span> <span class="icon-bar"></span> 
+			      		</button> 
+			      		<?php echo Html::link('/', 'Grand Hotel *****', array('class' => 'navbar-brand')); ?>
+
+			    	</div>  
+			    	<div id="bs-example-navbar-collapse-1" class="collapse navbar-collapse"> 
+			      		<ul class="nav navbar-nav"> 
+					        <?php if(!Auth::check()): ?>
+								<li><?php echo Html::linkRoute('login', 'Login'); ?></li>
+							<?php else: ?>
+								<?php if(Auth::user()->username == 'admin'): ?>
+									<li><?php echo Html::linkRoute('administration', 'Administration'); ?></li>
+								<?php endif; ?>
+								<!-- Reservations -->
+								<?php if(Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\ReservationsController@getReservations' ||
+								 Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\ReservationsController@getCreateReservation' ||
+								 Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\ReservationsController@getPastReservations' ||
+								 Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\ReservationsController@getPastReservations'): ?>
+									<li class="active"><?php echo Html::linkRoute('reservation', 'Reservations'); ?></li>
+								<?php else: ?>
+									<li><?php echo Html::linkRoute('reservation', 'Reservations'); ?></li>
+								<?php endif; ?>
+
+								<!-- Billing -->
+								<?php if(Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\BillingController@getBilling' ||	
+								Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\BillingController@getAccomGuest' || 
+								Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\BillingController@getCharge' || 
+								Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\BillingController@getAddGuest' || 
+								Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\BillingController@getPastAccom' || 
+								Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\BillingController@postSearch'): ?>
+									<li class="active"><?php echo Html::linkRoute('billing', 'Billing'); ?></li>
+								<?php else: ?>
+									<li><?php echo Html::linkRoute('billing', 'Billing'); ?></li>
+								<?php endif; ?>
+								<!-- Services -->
+								<?php if(Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\ServicesController@getServices' ||
+									Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\ServicesController@getNewService'): ?>
+									<li class="active"><?php echo Html::linkRoute('services', 'Services'); ?></li>
+								<?php else: ?>
+									<li><?php echo Html::linkRoute('services', 'Services'); ?></li>
+								<?php endif; ?>
+
+								<!-- Guests -->
+								<?php if(Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\GuestsController@getGuests'): ?>
+									<li class="active"><?php echo Html::linkRoute('guests', 'Guests'); ?></li>
+								<?php else: ?>
+									<li><?php echo Html::linkRoute('guests', 'Guests'); ?></li>	
+								<?php endif; ?>
+
+								<li><?php echo Html::linkRoute('logout', 'Logout ('.Auth::user()->username.')'); ?></li>					
+							<?php endif; ?>		
+			      		</ul>   
+			    	</div> 
+			  	</div> 
+			</nav>
+			
+
+			<?php if(Auth::check()): ?>
+
+
+			<!-- Administration -->			
+			<div class="row">
+
+
+				<?php if(Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\UsersController@getAdministration' || 
+					Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\UsersController@getRegister' ||
+					Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\UsersController@getEditAccount' ||
+					Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\UsersController@getDeleteAccount' ||
+					Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\UsersController@getDeleteDialog'): ?>
+					<div class="col-md-12">		
+						<div class="page-header">
+						  	<h1>Administration</h1>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<ul class="nav nav-pills nav-stacked">	
+							<?php if(Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\UsersController@getRegister'): ?>	
+								<li role="presentation" class="active"><?php echo Html::linkRoute('register', 'Create User'); ?></li>
+							<?php else: ?>
+								<li role="presentation"><?php echo Html::linkRoute('register', 'Create User'); ?></li>
+							<?php endif; ?>
+						</ul>
+					</div>
+					<div class="col-md-9">	
+						<?php if(Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\UsersController@getDeleteDialog'): ?>
+							<div class="modal-dialog">
+		    					<div class="modal-content">
+	      							<div class="modal-header">
+		        						
+	        							<h4 class="modal-title">Are you sure?</h4>
+	      							</div>
+	      							<div class="modal-body">
+	       								<p>Delete this account</p>
+      									<table table class="table table-striped">
+										<tr>
+											<th>Login</th>
+											<th>Name</th>
+											<th>Date of birth</th>
+											<th>Telephone</th>
+											<th>Email</th>
+											<th>Address</th>
+										</tr>	
+										<?php foreach($employees as $emp): ?>
+		  									<tr>
+		  										<?php if($emp->id == $_GET["id"]): ?>
+									    			<td><?php echo $emp->username; ?></td>
+									    			<td><?php echo $emp->name; ?></td>
+									    			<td><?php echo $emp->birth_date; ?></td>
+									    			<td><?php echo $emp->telephone; ?></td>
+									    			<td><?php echo $emp->mail; ?></td>
+									    			<td><?php echo $emp->address; ?></td>
+									    		<?php endif; ?>
+									  		</tr>
+										<?php endforeach; ?>		
+       								 </table>
+	   							    </div>
+	  	    						<div class="modal-footer">
+	  	    							<a href="<?php echo e(URL::route('administration')); ?>" class="btn btn-default btn-sm"> No </a>
+	        							<?php echo Html::linkAction('UsersController@getDeleteAccount', 'Yes' , ['id' => $_GET["id"]], array('class' => 'btn btn-primary btn-sm', 'type' => 'button')); ?>
+
+	      							</div>
+	    						</div><!-- /.modal-content -->
+	  						</div><!-- /.modal-dialog -->
+						<?php endif; ?>
+
+						<?php if(Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\UsersController@getRegister'): ?>
+							<?php echo $__env->yieldContent('content'); ?>
+						<?php endif; ?>
+
+						<?php if(Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\UsersController@getEditAccount'): ?>
+							<?php echo $__env->yieldContent('content'); ?>
+						<?php endif; ?>
+
+						<?php if(Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\UsersController@getAdministration'): ?>
+
+							<?php if(!$employees): ?>
+								<div class="alert alert-info" role="alert">In system is not created any user.</div>
+							<?php else: ?>
+								<table class="table table-striped">
+									<tr>
+										<th>Login</th>
+										<th>Name</th>
+										<th>Date of birth</th>
+										<th>Telephone number</th>
+										<th>Email</th>
+										<th>Address</th>
+								  	  	<th colspan="2">Action</th>
+									</tr>
+									<?php foreach($employees as $res): ?>
+						  			<tr>
+								    	<td><?php echo $res->username; ?></td>
+								  	  	<td><?php echo $res->name; ?></td>
+								  	  	<td><?php echo $res->birth_date; ?></td>
+								  	  	<td><?php echo $res->telephone; ?></td>
+								  	  	<td><?php echo $res->mail; ?></td>
+								  	  	<td><?php echo $res->address; ?></td>
+								  	  	<?php if($res->username != 'admin'): ?>
+								  	  	<td><?php echo Html::linkAction('UsersController@getEditAccount', 'Edit account', ['id' => $res->id]); ?></td>
+								    	<td><?php echo Html::linkRoute('deleteaccdialog', 'Delete account',   ['id' => $res->id]); ?></td>
+								    	<?php endif; ?>
+								    	
+									</tr>
+									<?php endforeach; ?>
+								</table>
+							<?php endif; ?>
+																	
+						<?php endif; ?>
+					</div>
+				<?php endif; ?>
+			</div>
+			<!-- Administration ends here-->
+
+			<!-- Billing -->		
+			<div class="row">
+				<?php if(Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\BillingController@getBilling' ||
+						Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\BillingController@getAccomGuest' ||
+						Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\BillingController@getCharge' ||
+						Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\BillingController@getAddGuest' || 
+						Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\BillingController@getPastAccom' || 
+						Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\BillingController@postSearch' ||
+						Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\BillingController@getCheckOut' ||
+						Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\BillingController@getPayments' ): ?>
+					<div class="col-md-12">
+						<div class="page-header">
+						  	<h1>Billing</h1>
+						</div>		
+					</div>
+					<div class="col-md-3">
+						<ul class="nav nav-pills nav-stacked">
+							<?php if(Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\BillingController@getAccomGuest'): ?>
+								<li role="presentation" class="active"><?php echo Html::linkRoute('accomguest', 'Accomodate New Guest'); ?></li>
+							<?php else: ?>
+								<li role="presentation"><?php echo Html::linkRoute('accomguest', 'Accomodate New Guest'); ?></li>
+							<?php endif; ?>
+
+							
+
+							<?php if(Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\BillingController@getPastAccom' || 
+							Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\BillingController@postSearch'): ?>
+								<li role="presentation" class="active"><?php echo Html::linkRoute('pastaccom', 'Past Accomodations'); ?></li>
+							<?php else: ?> 
+								<li role="presentation"><?php echo Html::linkRoute('pastaccom', 'Past Accomodations'); ?></li>
+							<?php endif; ?>
+
+
+							<?php if(Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\BillingController@getPayments'): ?>
+								<li role="presentation" class="active"><?php echo Html::linkRoute('payments', 'Payments'); ?></li>
+							<?php else: ?>
+								<li role="presentation"><?php echo Html::linkRoute('payments', 'Payments'); ?></li>
+							<?php endif; ?>
+						</ul>
+					</div>
+					<div class="col-md-9">
+
+						<?php if(Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\BillingController@getPayments'): ?>
+							<h3>Payments</h3>
+							<?php if(!$payments): ?>
+								<div class="alert alert-info" role="alert">No Payments.</div>
+							<?php else: ?>
+								<table class="table table-striped">
+									<tr>
+										<th>ID</th>
+										<th>Date</th>
+										<th>Price</th>
+										<th>Guets ID</th>
+										<th>Employee ID</th>
+										<th>Accommodation ID</th>
+									</tr>
+									<?php foreach($payments as $pay): ?>
+		  								<tr>
+									    	<td><?php echo $pay->CisPlatby; ?></td>
+									  	  	<td><?php echo $pay->Datum; ?></td>	
+									  	  	<td><?php echo $pay->Suma; ?></td>	
+									  	  	<td><?php echo $pay->IDZak; ?></td>
+									  	  	<td><?php echo $pay->IDZam; ?></td>	
+									    	<td><?php echo $pay->IDPobytu; ?></td>
+									  	</tr>
+									<?php endforeach; ?>
+								</table>
+							<?php endif; ?>
+						<?php endif; ?>
+
+						<?php if(Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\BillingController@getBilling'): ?>
+							<h3>Current Guests</h3>
+							<?php if(!$guests): ?>
+								<div class="alert alert-info" role="alert">No Current Guests.</div>
+							<?php else: ?>
+								<table class="table table-striped">
+									<tr>
+										<th>Name</th>
+										<th>From</th>
+										<th>To</th>
+										<th>Room</th>
+										<th>Price</th>
+										<th>Reservation ID</th>
+										<th>Action</th>
+										<th></th>
+										<th></th>
+									</tr>
+									<?php foreach($guests as $res): ?>
+		  								<tr>
+									    	<td><?php echo $res->Meno; ?></td>
+									  	  	<td><?php echo $res->Datum; ?></td>	
+									  	  	<td><?php echo $res->DatumDo; ?></td>	
+									  	  	<td><?php echo $res->Pokoj; ?></td>
+									  	  	<td><?php echo $res->Cena; ?></td>	
+									    	<td><?php echo $res->cispobytu; ?></td>
+									    	<td><?php echo Html::linkAction('BillingController@getAddGuest', 'Add Guest', ['id' => $res->cispobytu]); ?></td>
+									    	<td><?php echo Html::linkAction('BillingController@getCharge', 'Charge', ['id' => $res->cispobytu]); ?></td>
+										    <td><?php echo Html::linkAction('BillingController@getCheckOut', 'Check Out',  ['id' => $res->cispobytu]); ?></td>
+									  	</tr>
+									<?php endforeach; ?>
+								</table>
+							<?php endif; ?>
+						<?php endif; ?>
+
+						<?php if(Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\BillingController@getPastAccom' ||
+						Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\BillingController@postSearch'): ?>
+							<div id="searchbar">
+								<?php echo Form::open(array('action' => 'BillingController@postSearch', 'method' => 'POST')); ?>
+
+								<?php echo Form::token(); ?>
+
+								<?php echo Form::text('keyword', 'Search', array('id' => 'keyword')); ?>
+
+								<?php echo Form::submit('Search'); ?>
+
+								<?php echo Form::close(); ?>
+
+							</div>
+							<h3>Past Guests</h3>
+							<?php if(Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\BillingController@postSearch'): ?>
+								<?php if(!$searchresults): ?>
+									<div class="alert alert-info" role="alert">No Results</div>
+								<?php else: ?>			
+									<table class="table table-striped">
+										<tr>
+											<th>Name</th>
+											<th>Date</th>
+											<th>Persons</th>
+											<th>Room</th>
+											<th>price</th>
+										</tr>
+										<?php foreach($searchresults as $res): ?>
+	  										<tr>
+												<td><?php echo $res->Meno; ?></td>
+										  	  	<td><?php echo $res->Datum; ?></td>	
+										  	  	<td><?php echo $res->Osob; ?></td>	
+										  	  	<td><?php echo $res->Pokoj; ?></td>
+										  	  	<td><?php echo $res->Cena; ?></td>
+											</tr>
+										<?php endforeach; ?>
+									</table>
+								<?php endif; ?>
+							
+							<?php else: ?>	
+								<?php if(!$guests): ?>
+									<div class="alert alert-info" role="alert">No Past Guests.</div>
+								<?php else: ?>
+									<table class="table table-striped">
+										<tr>
+											<th>Name</th>
+											<th>Date</th>
+											<th>Persons</th>
+											<th>Room</th>
+											<th>Price</th>
+										</tr>
+										<?php foreach($guests as $res): ?>
+			  								<tr>
+										    	<td><?php echo $res->Meno; ?></td>
+										  	  	<td><?php echo $res->Datum; ?></td>	
+										  	  	<td><?php echo $res->Osob; ?></td>	
+										  	  	<td><?php echo $res->Pokoj; ?></td>
+										  	  	<td><?php echo $res->Cena; ?></td>
+										  	</tr>
+										<?php endforeach; ?>
+									</table>
+								<?php endif; ?>
+							<?php endif; ?>
+						<?php endif; ?>
+						<?php echo $__env->yieldContent('content'); ?>	
+					</div>
+						
+				<?php endif; ?>
+			</div>
+			<!-- Billing ends here-->
+
+			<!-- Services -->
+			<div class="row">
+				<?php if(Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\ServicesController@getServices' ||
+					Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\ServicesController@getNewService' ||
+					Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\ServicesController@getEditService'): ?>
+					<div class="col-md-12">
+						<div class="page-header">
+						  	<h1>Services</h1>
+						</div>		
+					</div>
+
+					<div class="col-md-3">
+						<ul class="nav nav-pills nav-stacked">
+							<?php if(Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\ServicesController@getNewService'): ?>
+								<li role="presentation" class="active"><?php echo Html::linkRoute('newservice', 'New Service'); ?></li>
+							<?php else: ?>
+								<li role="presentation"><?php echo Html::linkRoute('newservice', 'New Service'); ?></li>
+							<?php endif; ?>
+								
+								
+						</ul>
+					</div>
+					<div class="col-md-9">
+						<?php if(Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\ServicesController@getNewService'): ?>
+							<?php echo $__env->yieldContent('content'); ?>
+						<?php endif; ?>
+
+						<?php if(Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\ServicesController@getServices'): ?>
+							<h3>Current Services</h3>
+							<?php if(!$services): ?>
+								<div class="alert alert-info" role="alert">No Current Services</div>
+							<?php else: ?>
+								<table class="table table-striped">
+									<tr>
+										<th >Name</th>
+										<th>Price</th>
+										<th width="10%">Action</th>
+										<th width="10%"></th>
+									</tr>
+										<?php foreach($services as $res): ?>
+	  										<tr>
+										    	<td><?php echo $res->Nazov; ?></td>
+										  	  	<td><?php echo $res->Cena; ?></td>
+										    	<td><?php echo Html::linkAction('ServicesController@getEditService', 'Edit',  ['id' => $res->CisSluzby]); ?></td>
+										    	<td><?php echo Html::linkAction('ServicesController@getDeleteService', 'Delete',  ['id' => $res->CisSluzby]); ?></td>
+										  	</tr>
+										<?php endforeach; ?>
+									</table>
+								</ul>
+							<?php endif; ?>
+						<?php endif; ?>
+
+						<?php if(Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\ServicesController@getEditService'): ?>
+							<?php echo $__env->yieldContent('content'); ?>
+						<?php endif; ?>
+					</div>
+				<?php endif; ?>
+			</div>
+			<!-- Services ends here-->
+
+			<!-- Guests-->
+			<div class="row">
+				<?php if(Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\GuestsController@getGuests' || 
+				Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\GuestsController@postSearch'): ?>
+					<div class="col-md-12">
+						<div class="page-header">
+							<div id="searchbar">
+								<?php echo Form::open(array('action' => 'GuestsController@postSearch', 'method' => 'POST')); ?>
+
+								<?php echo Form::token(); ?>
+
+								<?php echo Form::text('keyword', 'Search', array('id' => 'keyword')); ?>
+
+								<?php echo Form::submit('Search'); ?>
+
+								<?php echo Form::close(); ?>
+
+							</div>
+						  	<h1>Guests</h1>
+
+						</div>	
+					<?php if(Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\GuestsController@postSearch'): ?>	
+						<?php echo $__env->yieldContent('content'); ?>
+					<?php endif; ?>	
+					<?php if(Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\GuestsController@getGuests'): ?>	
+						<?php if(!$guests): ?>
+								<div class="alert alert-info" role="alert">No Guests</div>
+						<?php else: ?>
+							<table class="table table-striped">
+								<tr>
+									<th>Name</th>
+									<th>Address</th>
+									<th>Birth date</th>
+									<th>Telephone</th>
+								</tr>
+									<?php foreach($guests as $res): ?>
+	  									<tr>
+									    	<td><?php echo $res->Meno; ?></td>
+									    	<td><?php echo $res->Adresa; ?></td>
+									    	<td><?php echo $res->DatNar; ?></td>
+									    	<td><?php echo $res->TelCis; ?></td>
+										</tr>
+									<?php endforeach; ?>
+							</table>
+						<?php endif; ?>
+					<?php endif; ?>
+					</div>
+				<?php endif; ?>
+			</div>
+			<!-- Guests ends here-->
+
+			<!-- Reservations-->
+			<div class="row">
+
+
+				<?php if(Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\ReservationsController@getEditReservation'): ?>
+					<?php echo $__env->yieldContent('content'); ?>
+				<?php endif; ?>
+				<?php if(Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\ReservationsController@getReservations' ||
+						Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\ReservationsController@getCreateReservation' ||
+						Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\ReservationsController@getPastReservations' || 
+						Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\ReservationsController@getDeleteDialog' ||
+						Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\ReservationsController@getConfirmDialog'): ?>
+					<div class="col-md-12">
+						<div class="page-header">
+						  	<h1>Reservations</h1>
+						</div>	
+					</div>
+
+					<div class="col-md-3">
+						<ul class="nav nav-pills nav-stacked">
+							<?php if(Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\ReservationsController@getCreateReservation'): ?>
+								<li role="presentation" class="active"><?php echo Html::linkRoute('createreservation', 'Create Reservation'); ?></li>
+							<?php else: ?>
+								<li role="presentation"><?php echo Html::linkRoute('createreservation', 'Create Reservation'); ?></li>
+							<?php endif; ?>
+
+							<?php if(Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\ReservationsController@getPastReservations'): ?>
+								<li role="presentation" class="active"><?php echo Html::linkRoute('pastreservations', 'Past Reservations'); ?></li>
+							<?php else: ?>
+								<li role="presentation"><?php echo Html::linkRoute('pastreservations', 'Past Reservations'); ?></li>
+							<?php endif; ?>
+						</ul>
+					</div>
+
+					<div class="col-md-9">
+						<?php if(Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\ReservationsController@getReservations'): ?>
+							<h3>Current Reservations</h3>
+							<?php if(!$reservations): ?>
+								<div class="alert alert-info" role="alert">No current reservations.</div>
+							<?php else: ?>
+								<table table class="table table-striped">
+									<tr>
+										<th>Name</th>
+										<th>From</th>
+										<th>To</th>
+										<th>Reservation ID</th>
+										<th>Room number</th>
+										<th>Action</th>
+										<th></th>
+										<th></th>
+									</tr>
+									<?php foreach($reservations as $res): ?>
+	  									<tr>
+									    	<td><?php echo $res->Meno; ?></td>
+									  	  	<td><?php echo $res->Datum; ?></td>	
+									  	  	<td><?php echo $res->DatumDo; ?></td>	
+									    	<td><?php echo $res->cisrezervace; ?></td>
+									    	<td><?php echo $res->CisPokoje; ?></td>
+									    	<td><?php echo Html::linkRoute('confirmdialog', 'Confirm', ['id' => $res->cisrezervace]); ?></td>
+									    	<td><?php echo Html::linkAction('ReservationsController@getEditReservation', 'Edit',  ['id' => $res->cisrezervace]); ?></td>
+									    	<td><?php echo Html::linkRoute('deletedialog', 'Delete',  ['id' => $res->cisrezervace]); ?></td>
+									  	</tr>
+									<?php endforeach; ?>										  
+								</table>
+							<?php endif; ?>
+						<?php endif; ?>
+
+						<?php if(Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\ReservationsController@getDeleteDialog'): ?>
+					 	<div class="modal-dialog">
+	    					<div class="modal-content">
+      							<div class="modal-header">
+	        															  
+								</table>
+        							<h4 class="modal-title">Are you sure?</h4>
+      							</div>
+      							<div class="modal-body">
+      								<p>Delete this reservation</p>
+      								<table table class="table table-striped">
+										<tr>
+											<th>Name</th>
+											<th>From</th>
+											<th>To</th>
+											<th>Reservation ID</th>
+											<th>Room</th>
+										</tr>	
+										<?php foreach($reservations as $res): ?>
+		  									<tr>
+		  										<?php if($res->cisrezervace == $_GET["id"]): ?>
+									    			<td><?php echo $res->Meno; ?></td>
+									    			<td><?php echo $res->Datum; ?></td>
+									    			<td><?php echo $res->DatumDo; ?></td>
+									    			<td><?php echo $res->cisrezervace; ?></td>
+									    			<td><?php echo $res->CisPokoje; ?></td>
+									    		<?php endif; ?>
+									  		</tr>
+										<?php endforeach; ?>		
+       								 </table>
+   							    </div>
+  	    						<div class="modal-footer">
+  	    							<a href="<?php echo e(URL::route('reservation')); ?>" class="btn btn-default btn-sm"> No </a>
+        							<?php echo Html::linkAction('ReservationsController@getDeleteReservation', 'Yes' , ['id' => $_GET["id"]], array('class' => 'btn btn-primary btn-sm', 'type' => 'button')); ?>
+
+      							</div>
+    						</div><!-- /.modal-content -->
+  						</div><!-- /.modal-dialog -->
+						<?php endif; ?>
+
+						<?php if(Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\ReservationsController@getConfirmDialog'): ?>
+							<div class="modal-dialog">
+	    					<div class="modal-content">
+      							<div class="modal-header">
+	        						
+        							<h4 class="modal-title">Are you sure?</h4>
+      							</div>
+      							<div class="modal-body">
+       								<p>Confirm this reservation</p>
+      								<table table class="table table-striped">
+										<tr>
+											<th>Name</th>
+											<th>From</th>
+											<th>To</th>
+											<th>Reservation ID</th>
+											<th>Room</th>
+										</tr>	
+										<?php foreach($reservations as $res): ?>
+		  									<tr>
+		  										<?php if($res->cisrezervace == $_GET["id"]): ?>
+									    			<td><?php echo $res->Meno; ?></td>
+									    			<td><?php echo $res->Datum; ?></td>
+									    			<td><?php echo $res->DatumDo; ?></td>
+									    			<td><?php echo $res->cisrezervace; ?></td>
+									    			<td><?php echo $res->CisPokoje; ?></td>
+									    		<?php endif; ?>
+									  		</tr>
+										<?php endforeach; ?>		
+       								 </table>
+   							    </div>
+  	    						<div class="modal-footer">
+  	    							<a href="<?php echo e(URL::route('reservation')); ?>" class="btn btn-default btn-sm"> No </a>
+        							<?php echo Html::linkAction('ReservationsController@getConfirmReservation', 'Yes' , ['id' => $_GET["id"]], array('class' => 'btn btn-primary btn-sm', 'type' => 'button')); ?>
+
+      							</div>
+    						</div><!-- /.modal-content -->
+  						</div><!-- /.modal-dialog -->
+						<?php endif; ?>
+  					
+				
+				
+
+
+						<?php if(Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\ReservationsController@getPastReservations'): ?>
+							<h3>Past Reservations</h3>
+							<?php if(!$reservations): ?>
+								<div class="alert alert-info" role="alert">No past reservations.</div>
+							<?php else: ?>
+								<table  class="table table-striped">
+									<tr>
+										<th>Name</th>
+										<th>Date</th>
+										<th>Room num.</th>
+										<th>Persons</th>
+										<th>Reservation ID</th>									
+									</tr>
+									<?php foreach($reservations as $res): ?>
+	  									<tr>
+									    	<td><?php echo $res->Meno; ?></td>	
+									    	<td><?php echo $res->Datum; ?></td>
+									    	<td><?php echo $res->CisPokoje; ?></td>
+									    	<td><?php echo $res->osob; ?></td>
+									    	<td><?php echo $res->CisRezervace; ?></td>												    	
+									    </tr>
+									<?php endforeach; ?> 
+								</table>
+							<?php endif; ?>
+						<?php endif; ?>
+						<?php echo $__env->yieldContent('content'); ?>
+					</div>
+				<?php endif; ?>
+			</div>
+			<!-- Reservations ends here-->
+
+
+			<!-- END -->	
+			<?php endif; ?>
+			<?php if(Route::getCurrentRoute()->getActionName() == 'App\Http\Controllers\UsersController@getLogin'): ?>
+				<?php echo $__env->yieldContent('content'); ?>
+			<?php endif; ?>
+		</div>	
+		
+		<div id="content">
+			<?php if(Session::has('message')): ?>
+				<div class="alert alert-info" role="alert"><?php echo Session::get('message'); ?></div>
+			<?php endif; ?>
+			
+			
+		</div>
+		<div id="footer">
+			&copy; Grand Hotel Information System <?php echo date('Y'); ?>
+
+		</div>
+
+	</body>
+</html>

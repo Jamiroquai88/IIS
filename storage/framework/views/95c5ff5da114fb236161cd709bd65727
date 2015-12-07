@@ -1,0 +1,27 @@
+<?php $__env->startSection('content'); ?>
+	<h1>Login</h1>
+
+	<?php echo Form::open(['login', 'POST']); ?>
+
+
+	<?php echo Form::token(); ?>
+
+
+	<p>
+		<?php echo Form::label('username', 'Username'); ?><br />
+		<?php echo Form::text('username', Input::old('username')); ?>
+
+	</p>
+
+	<p>
+		<?php echo Form::label('password', 'Password'); ?><br />
+		<?php echo Form::password('password'); ?>
+
+	</p>
+
+	<p><?php echo Form::submit('Login'); ?></p>
+
+	<?php echo Form::close(); ?>
+
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

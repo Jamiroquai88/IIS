@@ -1,0 +1,99 @@
+<?php $__env->startSection('content'); ?>
+
+	<h2>Accomodate guest</h2>
+	<?php if($errors->has()): ?>
+		<p>The following errors have occured:</p>
+
+		<ul id="form-errors">
+			<?php echo $errors->first('name','<li>:message</li>'); ?>
+
+			<?php echo $errors->first('guest_id','<li>:message</li>'); ?>
+
+			<?php echo $errors->first('date_to','<li>:message</li>'); ?>
+
+			<?php echo $errors->first('birth_date','<li>:message</li>'); ?>
+
+			<?php echo $errors->first('address','<li>:message</li>'); ?>
+
+			<?php echo $errors->first('telephone','<li>:message</li>'); ?>
+
+			<?php echo $errors->first('mail','<li>:message</li>'); ?>
+
+			<?php echo $errors->first('room','<li>:message</li>'); ?>
+
+			<?php echo $errors->first('persons_number','<li>:message</li>'); ?>
+
+			<?php echo $errors->first('message','<li>:message</li>'); ?>
+
+		</ul>
+	<?php endif; ?>
+
+	<?php echo Form::open(['accomguest', 'POST']); ?>
+
+
+	<?php echo Form::token(); ?>
+
+
+	<p>
+		<?php echo Form::label('name', 'Full Name *'); ?><br />
+		<?php echo Form::text('name', Input::old('name')); ?>
+
+	</p>
+
+	<p>
+		<?php echo Form::label('persons_number', 'Number of persons *'); ?><br />
+		<?php echo Form::number('persons_number', '1'); ?>
+
+	</p>
+
+	<p>
+		<?php echo Form::label('date_to', 'Date To *'); ?><br />
+		<?php echo Form::date('date_to', \Carbon\Carbon::now()); ?>
+
+	</p>
+
+	<p>
+		<?php echo Form::label('address', 'Address'); ?><br />
+		<?php echo Form::text('address', Input::old('address')); ?>
+
+	</p>
+
+	<p>
+		<?php echo Form::label('birth_date', 'Date of birth'); ?><br />
+		<?php echo Form::date('birth_date'); ?>
+
+	</p>	
+
+	<p>
+		<?php echo Form::label('guest_id', 'Guest ID number *'); ?><br />
+		<?php echo Form::text('guest_id',  Input::old('guest_id')); ?>
+
+	</p>	
+
+	<p>
+		<?php echo Form::label('telephone', 'Telephone Number'); ?><br />
+		<?php echo Form::text('telephone', Input::old('telephone')); ?>
+
+	</p>
+
+	<p>
+		<?php echo Form::label('mail', 'E-mail'); ?><br />
+		<?php echo Form::text('mail', Input::old('mail')); ?>
+
+	</p>
+
+	<p>
+		<?php echo Form::label('room', 'Room number *'); ?><br />
+		<?php echo Form::select('room', [null=>'Please Select'] + $allrooms); ?>
+
+	</p>
+
+	<p><?php echo Form::submit('Accomodate'); ?></p>
+
+	<h5>All fields with * are required.</h5>
+
+	<?php echo Form::close(); ?>
+
+
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

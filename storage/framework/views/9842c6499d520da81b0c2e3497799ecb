@@ -1,0 +1,57 @@
+<?php $__env->startSection('content'); ?>
+<div id="ask">
+	<h2>Edit Service</h2>
+
+	<?php if(Auth::check()): ?>
+		<?php if($errors->has()): ?>
+			<p>The following errors have occured:</p>
+			<ul id="form-errors">
+				<?php echo $errors->first('name','<li>:message</li>'); ?>
+
+				<?php echo $errors->first('price','<li>:message</li>'); ?>
+
+		<?php endif; ?>
+
+		<?php echo Form::open(['editservice', 'POST']); ?>
+
+	
+		<?php echo Form::hidden('id', $service->CisSluzby); ?>
+
+
+		<?php echo Form::token(); ?>
+
+		
+		<p>
+			<?php echo Form::label('name', 'Service Name *'); ?><br />
+			<?php if(!$old): ?>
+				<?php echo Form::text('name', $service->Nazov); ?>
+
+			<?php else: ?>
+				<?php echo Form::text('name', Input::old('name')); ?>
+
+			<?php endif; ?>
+		</p>
+
+		<p>
+			<?php echo Form::label('price', 'Price *'); ?><br />
+			<?php if(!$old): ?>
+				<?php echo Form::number('price', $service->Cena); ?>
+
+			<?php else: ?>
+				<?php echo Form::number('price', Input::old('price')); ?>
+
+			<?php endif; ?>
+		</p>	
+
+		<p><?php echo Form::submit('Edit Service'); ?></p>
+
+		<?php echo Form::close(); ?>
+
+
+		<h5>All fields with * are required.</h5>
+
+	<?php endif; ?>
+
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

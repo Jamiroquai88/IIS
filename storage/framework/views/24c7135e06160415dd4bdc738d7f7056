@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Authors and books</title>
+</head>
+<body>
+	<?php echo $__env->yieldContent('content'); ?>
+</body>
+</html>

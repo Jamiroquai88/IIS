@@ -1,0 +1,48 @@
+<?php $__env->startSection('content'); ?>
+<div id="ask">
+	<h2>Charge</h2>
+
+	<?php if(Auth::check()): ?>
+		<?php if($errors->has()): ?>
+			<p>The following errors have occured:</p>
+			<ul id="form-errors">
+				<?php echo $errors->first('service','<li>:message</li>'); ?>
+
+				<?php echo $errors->first('amount','<li>:message</li>'); ?>
+
+			</ul>
+		<?php endif; ?>
+
+		<?php echo Form::open(['charge', 'POST']); ?>
+
+		<?php echo Form::hidden('id', $previous); ?>
+
+
+		<?php echo Form::token(); ?>
+
+		
+		<p>
+			<?php echo Form::label('service', 'Service *'); ?><br />
+			<?php echo Form::select('service', [null=>'Please Select'] + $services); ?>
+
+		</p>
+
+		<p>
+			<?php echo Form::label('amount', 'Amount *'); ?><br />
+			<?php echo Form::number('amount', '1'); ?>
+
+		</p>
+
+		<p><?php echo Form::submit('Charge'); ?></p>
+
+		<?php echo Form::close(); ?>
+
+
+		<h5>All fields with * are required.</h5>
+	<?php else: ?>
+		<p>please login</p>
+	<?php endif; ?>
+
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

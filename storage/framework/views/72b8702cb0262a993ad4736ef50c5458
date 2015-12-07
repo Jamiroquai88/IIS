@@ -1,0 +1,51 @@
+<?php $__env->startSection('content'); ?>
+<div id="ask">
+	<h3>Check-out</h3>
+
+	<?php if(Auth::check()): ?>
+		<table class="table table-striped">
+			<tr>
+				<th>Name</th>
+				<th>From</th>
+				<th>To</th>
+				<th>Nights</th>
+				<th>Room</th>
+				<th>To Pay</th>
+			</tr>
+			<tr>
+			  	<td><?php echo $info->name; ?></td>
+			  	<td><?php echo $info->from; ?></td>	
+			  	<td><?php echo $info->to; ?></td>	
+			  	<td><?php echo $info->nights; ?></td>
+			  	<td><?php echo $info->room; ?></td>	
+			   	<td><?php echo $info->pay; ?></td>
+			</tr>
+
+			
+		</table>
+		<?php echo Form::open(['checkout', 'POST']); ?>
+
+		
+			<?php echo Form::hidden('id', $previous); ?>
+
+			<?php echo Form::hidden('payment', $info->pay); ?>
+
+
+			<?php echo Form::token(); ?>
+
+
+			<p><?php echo Form::submit('Confirm'); ?></p>
+
+			<?php echo Form::close(); ?>
+
+	<?php endif; ?>
+
+</div>
+<?php $__env->stopSection(); ?>
+
+
+
+
+
+							
+<?php echo $__env->make('layouts.default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -1,0 +1,26 @@
+<?php $__env->startSection('content'); ?>
+
+		<h3>Search Results</h3>
+
+			<?php if(!$searchresults): ?>
+				<div class="alert alert-info" role="alert">No Results</div>
+			<?php else: ?>			
+				<table class="table table-striped">
+					<tr>
+						<th>Name</th>
+						<th>Address</th>
+						<th>Birth date</th>
+						<th>Telephone</th>
+					</tr>
+					<?php foreach($searchresults as $res): ?>
+	  					<tr>
+							<td><?php echo $res->Meno; ?></td>
+							<td><?php echo $res->Adresa; ?></td>
+							<td><?php echo $res->DatNar; ?></td>
+							<td><?php echo $res->TelCis; ?></td>
+						</tr>
+					<?php endforeach; ?>
+				</table>
+			<?php endif; ?>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

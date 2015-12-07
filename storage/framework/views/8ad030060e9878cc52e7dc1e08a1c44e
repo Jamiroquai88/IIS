@@ -1,0 +1,32 @@
+<?php $__env->startSection('content'); ?>
+<div id="ask">
+	<h1>Shit</h1>
+
+	<?php if(Auth::check()): ?>
+		<?php if($errors->has()): ?>
+			<p>The following errors have occured:</p>
+			<ul id="form-errors">
+				<?php echo $errors->first('name','<li>:message</li>'); ?>
+
+			</ul>
+		<?php endif; ?>
+
+		<?php echo Form::open(['makereservation', 'POST']); ?>
+
+
+		<?php echo Form::token(); ?>
+
+		
+		<p>
+			<?php echo Form::label('name', 'Name'); ?><br />
+			<?php echo Form::text('name', Input::old('name')); ?>
+
+		</p>
+
+		<p><?php echo Form::submit('Make a reservation'); ?></p>
+		
+	<?php endif; ?>
+
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

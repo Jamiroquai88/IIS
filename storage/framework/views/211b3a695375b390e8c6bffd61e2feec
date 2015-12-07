@@ -1,0 +1,42 @@
+<?php $__env->startSection('content'); ?>
+	
+		<h2>Search Results</h2>
+		<div id="searchbar">
+			<?php echo Form::open(array('action' => 'GuestsController@postSearch', 'method' => 'POST')); ?>
+
+			<?php echo Form::token(); ?>
+
+			<?php echo Form::text('keyword', 'Search', array('id' => 'keyword')); ?>
+
+			<?php echo Form::submit('Search'); ?>
+
+			<?php echo Form::close(); ?>
+
+		</div>
+			<?php if(!$searchresults): ?>
+				<h3>No Results</h3>
+			<?php else: ?>			
+				<ul>
+					<table style="width:50%">
+						<tr>
+							<td>Name</td>
+							<td>Date</td>
+							<td>Persons</td>
+							<td>Room</td>
+							<td>Price</td>
+						</tr>
+						<?php foreach($searchresults as $res): ?>
+		  					<tr>
+								<td><?php echo $res->Meno; ?></td>
+								<td><?php echo $res->Datum; ?></td>
+								<td><?php echo $res->Osob; ?></td>
+								<td><?php echo $res->Pokoj; ?></td>
+								<td><?php echo $res->Cena; ?></td>
+							</tr>
+						<?php endforeach; ?>
+					</table>
+				</ul>
+			<?php endif; ?>
+
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

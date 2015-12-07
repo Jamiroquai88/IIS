@@ -1,0 +1,5 @@
+@layout('layouts.default')
+
+<?php $__env->startSection('content'); ?>
+	<H1>Authors home page</H1>
+<?php $__env->stopSection(); ?>
